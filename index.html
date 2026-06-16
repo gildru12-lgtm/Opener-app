@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>First Line Generator 💘</title>
+  <meta name="description" content="Get personalized dating app openers in any language using AI." />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #1a0533 0%, #2d0a4e 50%, #1a0533 100%);
+      font-family: -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    .container { width: 100%; max-width: 560px; }
+    .header { text-align: center; margin-bottom: 32px; }
+    .header .emoji { font-size: 40px; margin-bottom: 8px; }
+    .header h1 { color: #fff; font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+    .header p { color: #c084fc; font-size: 15px; }
+    .card {
+      background: rgba(255,255,255,0.06);
+      border-radius: 20px;
+      border: 1px solid rgba(192,132,252,0.2);
+      padding: 28px;
+    }
+    label { color: #e9d5ff; font-size: 13px; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; display: block; margin-bottom: 8px; }
+    textarea, select {
+      width: 100%;
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(192,132,252,0.3);
+      border-radius: 12px;
+      padding: 14px 16px;
+      color: #fff;
+      font-size: 15px;
+      line-height: 1.6;
+      outline: none;
+      font-family: inherit;
+    }
+    textarea { resize: vertical; }
+    select { cursor: pointer; margin-bottom: 0; }
+    select option { background: #2d0a4e; }
+    .section { margin-top: 20px; }
+    .tones { display: flex; gap: 10px; margin-top: 12px; }
+    .tone-btn {
+      flex: 1;
+      padding: 10px 8px;
+      border-radius: 12px;
+      border: 2px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.04);
+      color: #9ca3af;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.15s;
+    }
+    .tone-btn.active {
+      border-color: #c084fc;
+      background: rgba(192,132,252,0.2);
+      color: #e9d5ff;
+    }
+    .tone-emoji { font-size: 18px; }
+    .tone-name { font-size: 12px; font-weight: 600; margin-top: 2px; }
+    .tone-desc { font-size: 11px; opacity: 0.7; margin-top: 1px; }
+    .generate-btn {
+      width: 100%;
+      padding: 14px;
+      border-radius: 12px;
+      border: none;
+      background: linear-gradient(135deg, #9333ea, #ec4899);
+      color: #fff;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 24px;
+      transition: opacity 0.2s;
+    }
+    .generate-btn:disabled {
+      background: rgba(255,255,255,0.1);
+      color: #6b7280;
+      cursor: not-allowed;
+    }
+    .error { color: #f87171; font-size: 14px; text-align: center; margin-top: 12px; }
+    .results { margin-top: 24px; }
+    .detected { color: #a78bfa; font-size: 13px; text-align: center; margin-bottom: 10px; }
+    .results-label { color: #c084fc; font-size: 13px; font-weight: 600; text-align: center; margin-bottom: 14px; text-transform: uppercase; letter-spacing: 0.05em; }
+    .opener-btn {
+      width: 100%;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 14px;
+      padding: 16px 18px;
+      color: #fff;
+      font-size: 15px;
+      line-height: 1.6;
+      text-align: left;
+      cursor: pointer;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 12px;
+      transition: all 0.15s;
+      font-family: inherit;
+    }
+    .opener-btn.copied {
+      background: rgba(192,132,252,0.25);
+      border-color: #c084fc;
+    }
+    .opener-num { font-size: 12px; color: #c084fc; font-weight: 700; margin-top: 2px; min-width: 20px; }
+    .hint { color: #6b7280; font-size: 12px; text-align: center; margin-top: 4px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="emoji">💘</div>
+      <h1>First Line Generator</h1>
+      <p>Paste their bio in any language. Get a perfect opener.</p>
+    </div>
+
+    <div class="card">
+      <label>Their Profile Bio</label>
+      <textarea id="bio" rows="5" placeholder="Paste their bio here — any language works!"></textarea>
+
+      <div class="section">
+        <label>Opener Language</label>
+        <select id="lang">
+          <option value="auto">🌐 Auto-detect</option>
+          <option value="en">🇺🇸 English</option>
+          <option value="he">🇮🇱 Hebrew</option>
+          <option value="ar">🇸🇦 Arabic</option>
+          <option value="es">🇪🇸 Spanish</option>
+          <option value="ru">🇷🇺 Russian</option>
+          <option value="fr">🇫🇷 French</option>
+          <option value="de">🇩🇪 German</option>
+          <option value="it">🇮🇹 Italian</option>
+          <option value="pt">🇧🇷 Portuguese</option>
+          <option value="zh">🇨🇳 Chinese</option>
+          <option value="ja">🇯🇵 Japanese</option>
+        </select>
+      </div>
+
+      <div class="section">
+        <label>Vibe</label>
+        <div class="tones">
+          <button class="tone-btn active" data-tone="witty">
+            <div class="tone-emoji">😏</div>
+            <div class="tone-name">Witty</div>
+            <div class="tone-desc">Clever & playful</div>
+          </button>
+          <button class="tone-btn" data-tone="sweet">
+            <div class="tone-emoji">🥰</div>
+            <div class="tone-name">Sweet</div>
+            <div class="tone-desc">Warm & genuine</div>
+          </button>
+          <button class="tone-btn" data-tone="bold">
+            <div class="tone-emoji">🔥</div>
+            <div class="tone-name">Bold</div>
+            <div class="tone-desc">Confident & direct</div>
+          </button>
+        </div>
+      </div>
+
+      <button class="generate-btn" id="generateBtn" disabled>✨ Generate Openers</button>
+      <div class="error" id="error" style="display:none"></div>
+    </div>
+
+    <div class="results" id="results" style="display:none">
+      <div class="detected" id="detected"></div>
+      <div class="results-label">Tap to copy</div>
+      <div id="openersList"></div>
+      <div class="hint">Not feeling these? Hit generate again for fresh ones.</div>
+    </div>
+  </div>
+
+  <script>
+    let selectedTone = "witty";
+
+    const bioEl = document.getElementById("bio");
+    const generateBtn = document.getElementById("generateBtn");
+    const errorEl = document.getElementById("error");
+    const resultsEl = document.getElementById("results");
+    const detectedEl = document.getElementById("detected");
+    const openersListEl = document.getElementById("openersList");
+
+    bioEl.addEventListener("input", () => {
+      generateBtn.disabled = !bioEl.value.trim();
+      const rtl = /[\u0590-\u05FF\u0600-\u06FF]/.test(bioEl.value);
+      bioEl.dir = rtl ? "rtl" : "ltr";
+    });
+
+    document.querySelectorAll(".tone-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".tone-btn").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        selectedTone = btn.dataset.tone;
+      });
+    });
+
+    generateBtn.addEventListener("click", async () => {
+      const bio = bioEl.value.trim();
+      const outputLang = document.getElementById("lang").value;
+      if (!bio) return;
+
+      generateBtn.disabled = true;
+      generateBtn.textContent = "✨ Crafting your openers…";
+      errorEl.style.display = "none";
+      resultsEl.style.display = "none";
+
+      try {
+        const response = await fetch("/api/generate", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ bio, tone: selectedTone, outputLang }),
+        });
+
+        if (!response.ok) throw new Error("API error");
+        const data = await response.json();
+
+        if (data.detectedLanguage) {
+          detectedEl.textContent = "🌐 Detected: " + data.detectedLanguage;
+          detectedEl.style.display = "block";
+        }
+
+        openersListEl.innerHTML = "";
+        (data.openers || []).forEach((opener, i) => {
+          const rtl = /[\u0590-\u05FF\u0600-\u06FF]/.test(opener);
+          const btn = document.createElement("button");
+          btn.className = "opener-btn";
+          btn.dir = rtl ? "rtl" : "ltr";
+          btn.style.flexDirection = rtl ? "row-reverse" : "row";
+          btn.style.textAlign = rtl ? "right" : "left";
+          btn.innerHTML = `<span class="opener-num">0${i+1}</span><span>${opener}</span>`;
+          btn.addEventListener("click", () => {
+            navigator.clipboard.writeText(opener);
+            btn.classList.add("copied");
+            btn.querySelector(".opener-num").textContent = "✓";
+            setTimeout(() => {
+              btn.classList.remove("copied");
+              btn.querySelector(".opener-num").textContent = "0" + (i+1);
+            }, 2000);
+          });
+          openersListEl.appendChild(btn);
+        });
+
+        resultsEl.style.display = "block";
+      } catch (e) {
+        errorEl.textContent = "Something went wrong. Please try again.";
+        errorEl.style.display = "block";
+      } finally {
+        generateBtn.disabled = false;
+        generateBtn.textContent = "✨ Generate Openers";
+      }
+    });
+  </script>
+</body>
+</html>
